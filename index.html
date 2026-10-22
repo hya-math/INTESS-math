@@ -1731,7 +1731,7 @@ const DEFS=[
 {id:'exponentProduct',symbol:'Πe',title:'指数の総積',desc:'素因数分解 n=∏pᵉ の指数 e をすべて掛ける。1の空積は1。',formula:'Πeₚ',rarity:'epic',cost:8,oneTime:true,weight:1.3},
 {id:'oddPositionSum',symbol:'Σ奇',title:'奇数桁目の総和',desc:'右端の一の位を1桁目として、奇数番目の桁を足す。',formula:'Σ aᵢ (i odd, from right)',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
 {id:'evenPositionSum',symbol:'Σ偶',title:'偶数桁目の総和',desc:'右端の一の位を1桁目として、偶数番目の桁を足す。',formula:'Σ aᵢ (i even, from right)',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
-{id:'mostCommonDigit',symbol:'d★',title:'最も多く出現する数字',desc:'最頻の数字を公開。同率なら該当する数字をすべて公開。',formula:'mode(digits(n))',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
+{id:'mostCommonDigit',symbol:'d★',title:'最も多く出現する数字',desc:'最も多く出現する数字を公開。同数なら、その中で最も大きい数字を公開。',formula:'mode(digits(n))',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
 {id:'nearestCube',symbol:'∛≈',title:'最も近い立方数',desc:'nとの差が最小の正の立方数そのものを公開。',formula:'argmin k³ | n−k³ |',rarity:'rare',cost:5,oneTime:true,weight:3.6},
 {id:'nearestPrimeDistance',symbol:'Δp',title:'最寄りの素数まで',desc:'最も近い素数までの距離 |n−p| を公開。',formula:'minₚ prime |n−p|',rarity:'uncommon',cost:3,oneTime:true,weight:5.3},
 {id:'binaryDigits',symbol:'₂#',title:'2進数表記の桁数',desc:'nを2進数で表したときの桁数を公開。',formula:'⌊log₂ n⌋+1',rarity:'rare',cost:4,oneTime:true,weight:3.5},
@@ -1788,7 +1788,7 @@ function buildFeatures(){
   const sqrt=Math.floor(Math.sqrt(n));
   const ascents=dsArr.slice(1).filter((d,i)=>d>dsArr[i]).length;
   const freq={};for(const d of dsArr)freq[d]=(freq[d]||0)+1;const repeatMax=Math.max(...Object.values(freq));
-  const topFreqDigits=Object.keys(freq).map(Number).filter(d=>freq[d]===repeatMax).sort((a,b)=>a-b);
+  const topFreqDigits=Object.keys(freq).map(Number).filter(d=>freq[d]===repeatMax).sort((a,b)=>b-a);
   const primeDigits=dsArr.filter(d=>[2,3,5,7].includes(d)).length;
   const squareDistance=Math.min(n-sqrt*sqrt,(sqrt+1)*(sqrt+1)-n);
   const distanceSquare=(sqrt*sqrt===n)?0:(sqrt+1)*(sqrt+1)-n;
@@ -1805,7 +1805,7 @@ function buildFeatures(){
   const digitLcm=nonzeroDigits.reduce((a,b)=>a/gcd(a,b)*b,1);
   const digitGcd=dsArr.reduce((a,b)=>gcd(a,b),0);
   const leadingLastDiff=Math.abs(dsArr[0]-dsArr[dsArr.length-1]);
-  FEATURES[n]={n,divisorCount:dc,divisorSum:ds,digitSum:sum,totient:phi,digitProduct,prime:n>=2&&spf[n]===n,digitKinds:new Set(dsArr).size,digits:str.length,maxDigit:Math.max(...dsArr),leading:dsArr[0],smallestPrime:n===1?null:spf[n],mod7:n%7,parity:n%2===0?'偶数':'奇数',lastDigit:n%10,mod9:n%9,mod11:n%11,digitSquareSum:dsArr.reduce((a,b)=>a+b*b,0),zeroCount:zc,trailingZeros:tz,primeFactors:omega,largestPrime,omega,Omega,exponentProduct,maxExponent:maxExp,v2,binaryOnes:pop,binaryDigits,reverse:n+rev,mod13:n%13,mod17:n%17,mod37:n%37,mod97:n%97,mod100:n%100,lastTwoSum,gcd100:gcd(n,100),squareDistance,primePower,primeFactorSum,cubeCheck,oddDivisorCount,squareFactor,divisorCountPrime,radical:rad,mirrorDiff:Math.abs(n-rev),ascents,repeatMax,mostCommonDigit:topFreqDigits.join('・'),oddPositionSum,evenPositionSum,nearestCube,nearestPrimeDistance,digitLcm,digitGcd,leadingLastDiff,quotient10000:Math.floor(10000/n),palindrome:str===str.split('').reverse().join(''),ascending:ascents===str.length-1,repeated:repeatMax===str.length,harshad:n%sum===0,abundant:aliquot>n,sumPrimeDigits:primeDigits,alternating:alt,distanceSquare};
+  FEATURES[n]={n,divisorCount:dc,divisorSum:ds,digitSum:sum,totient:phi,digitProduct,prime:n>=2&&spf[n]===n,digitKinds:new Set(dsArr).size,digits:str.length,maxDigit:Math.max(...dsArr),leading:dsArr[0],smallestPrime:n===1?null:spf[n],mod7:n%7,parity:n%2===0?'偶数':'奇数',lastDigit:n%10,mod9:n%9,mod11:n%11,digitSquareSum:dsArr.reduce((a,b)=>a+b*b,0),zeroCount:zc,trailingZeros:tz,primeFactors:omega,largestPrime,omega,Omega,exponentProduct,maxExponent:maxExp,v2,binaryOnes:pop,binaryDigits,reverse:n+rev,mod13:n%13,mod17:n%17,mod37:n%37,mod97:n%97,mod100:n%100,lastTwoSum,gcd100:gcd(n,100),squareDistance,primePower,primeFactorSum,cubeCheck,oddDivisorCount,squareFactor,divisorCountPrime,radical:rad,mirrorDiff:Math.abs(n-rev),ascents,repeatMax,mostCommonDigit:topFreqDigits[0],oddPositionSum,evenPositionSum,nearestCube,nearestPrimeDistance,digitLcm,digitGcd,leadingLastDiff,quotient10000:Math.floor(10000/n),palindrome:str===str.split('').reverse().join(''),ascending:ascents===str.length-1,repeated:repeatMax===str.length,harshad:n%sum===0,abundant:aliquot>n,sumPrimeDigits:primeDigits,alternating:alt,distanceSquare};
  }
 }
 function value(id,n,param){const f=FEATURES[n];switch(id){case'compare':return n>Number(param.N);case'multiple':return n%Number(param.p)===0;case'modPick':return n%Number(param.p);case'interval':return n>=Number(param.a)&&n<=Number(param.b);case'nearerOfTwo':{const A=Number(param.A),B=Number(param.B),da=Math.abs(n-A),db=Math.abs(n-B);return da===db?Math.max(A,B):(da<db?A:B)}case'neighborhood':return Math.abs(n-Number(param.k))<=Number(param.d);case'threeIntervals':return n<=Number(param.a)?1:n<=Number(param.b)?2:3;case'omega':return f.Omega;default:return f[id]}}
