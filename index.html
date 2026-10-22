@@ -1638,6 +1638,208 @@ transform:none;
 }
 .multi-reveal-card.flipped .multi-category{color:var(--catc) !important;border-color:color-mix(in srgb,var(--catc) 42%,#29394d) !important;background:color-mix(in srgb,var(--catc) 8%,#111d2c) !important;}
 
+
+
+/* Final mobile flip fix + restrained rarity top-edge design. */
+/* Avoid filter-based flattening on the 3D card containers (notably iOS Safari). */
+.reveal-card,
+.reveal-card.opened,
+.multi-reveal-card,
+.multi-reveal-card.flipped,
+.multi-reveal-card:not(.flipped):hover {
+  filter:none !important;
+  -webkit-filter:none !important;
+}
+.reveal-card,
+.multi-reveal-card {
+  -webkit-perspective:1200px !important;
+  perspective:1200px !important;
+  -webkit-transform-style:preserve-3d !important;
+  transform-style:preserve-3d !important;
+  isolation:auto !important;
+}
+.reveal-inner,
+.multi-reveal-inner {
+  -webkit-transform-style:preserve-3d !important;
+  transform-style:preserve-3d !important;
+  -webkit-backface-visibility:visible;
+  backface-visibility:visible;
+  will-change:transform;
+}
+.face,
+.multi-face {
+  -webkit-backface-visibility:hidden !important;
+  backface-visibility:hidden !important;
+  -webkit-transform-style:preserve-3d;
+  transform-style:preserve-3d;
+  -webkit-transform:translateZ(0.5px);
+  transform:translateZ(0.5px);
+  isolation:isolate;
+}
+.reveal-stage .back,
+.multi-back {
+  -webkit-transform:rotateY(0deg) translateZ(0.5px) !important;
+  transform:rotateY(0deg) translateZ(0.5px) !important;
+  box-shadow:inset 0 0 0 1px #ffffff08, 0 12px 26px #0006 !important;
+}
+.reveal-stage .front,
+.multi-front {
+  -webkit-transform:rotateY(180deg) translateZ(0.5px) !important;
+  transform:rotateY(180deg) translateZ(0.5px) !important;
+  box-shadow:0 10px 26px #0006 !important;
+}
+/* Retain useful depth without a filter on the parent stacking context. */
+.reveal-card {box-shadow:none !important;}
+.multi-reveal-card {box-shadow:none !important;}
+.reveal-stage .back:before,
+.reveal-stage .front:before,
+.multi-back:before,
+.multi-front:after {pointer-events:none !important;}
+
+/* The hand card uses a neutral frame and one softly glowing rarity-coloured line on its top edge. */
+.card,
+.card.category-order,.card.category-residue,.card.category-factor,.card.category-digit,.card.category-other {
+  position:relative !important;
+  border:1px solid #2c3b51 !important;
+  background:linear-gradient(155deg,#172536 0%,#111c2a 78%,#101a27 100%) !important;
+  box-shadow:0 7px 18px #00000022 !important;
+}
+.card:before {
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  top:0 !important;
+  left:10px !important;
+  right:10px !important;
+  width:auto !important;
+  height:2px !important;
+  border:0 !important;
+  border-radius:0 0 3px 3px !important;
+  background:var(--rc) !important;
+  opacity:.78 !important;
+  box-shadow:0 0 4px color-mix(in srgb,var(--rc) 36%,transparent),0 0 9px color-mix(in srgb,var(--rc) 18%,transparent) !important;
+  pointer-events:none !important;
+}
+.card:after {display:none !important;content:none !important;}
+.card:hover:not(:disabled) {
+  border-color:#3b4b62 !important;
+  box-shadow:0 8px 19px #0000002a !important;
+  transform:translateY(-1px) !important;
+}
+.card.selected {
+  border-color:#53657d !important;
+  box-shadow:0 0 0 1px #465a72,0 0 13px #6caeff12 !important;
+}
+.card.common{--rc:#aab4c2 !important;}
+.card.uncommon{--rc:#48ff9e !important;}
+.card.rare{--rc:#43b7ff !important;}
+.card.epic{--rc:#d185ff !important;}
+.card.legendary{--rc:#ffdc55 !important;}
+/* Category remains visible as a small, separate coloured label. */
+.card.category-order{--catc:#ff9b83 !important;}
+.card.category-residue{--catc:#37d8ff !important;}
+.card.category-factor{--catc:#c29aff !important;}
+.card.category-digit{--catc:#54e8b4 !important;}
+.card.category-other{--catc:#ffd05a !important;}
+.card .category-chip {
+  color:var(--catc) !important;
+  border-color:color-mix(in srgb,var(--catc) 40%,#26374b) !important;
+  background:color-mix(in srgb,var(--catc) 8%,#101b2c) !important;
+  box-shadow:none !important;
+}
+.card .category-chip {
+  --catc:inherit !important;
+  color:var(--catc) !important;
+  border-color:color-mix(in srgb,var(--catc) 40%,#26374b) !important;
+  background:color-mix(in srgb,var(--catc) 8%,#101b2c) !important;
+}
+@media(max-width:620px) {
+  .reveal-overlay {padding:12px !important;}
+  .reveal-card {width:min(205px,62vw) !important;height:min(285px,82vw) !important;}
+  .reveal-inner,.multi-reveal-inner {-webkit-transform-style:preserve-3d !important;transform-style:preserve-3d !important;}
+  .face,.multi-face {-webkit-backface-visibility:hidden !important;backface-visibility:hidden !important;}
+}
+
+
+
+/* Drawn faces share the same restrained treatment: a softly glowing top edge only. */
+.reveal-stage.common .front,
+.reveal-stage.uncommon .front,
+.reveal-stage.rare .front,
+.reveal-stage.epic .front,
+.reveal-stage.legendary .front {
+  border:1px solid #35465d !important;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--rc) 7%,#19283d),#101827 78%) !important;
+  box-shadow:inset 0 0 0 1px #ffffff05,0 10px 26px #0006 !important;
+}
+.reveal-stage .front:before {border-color:#34465c !important;}
+.reveal-stage .front:after {
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:0 12px auto 12px !important;
+  width:auto !important;
+  height:2px !important;
+  border:0 !important;
+  border-radius:0 0 3px 3px !important;
+  background:var(--rc) !important;
+  box-shadow:0 0 4px color-mix(in srgb,var(--rc) 38%,transparent),0 0 10px color-mix(in srgb,var(--rc) 18%,transparent) !important;
+  opacity:.78 !important;
+  transform:none !important;
+}
+.multi-reveal-card.flipped .multi-front,
+.multi-front {
+  border:1px solid #35465d !important;
+  background:linear-gradient(155deg,color-mix(in srgb,var(--rc) 7%,#19283d),#101827 78%) !important;
+  box-shadow:inset 0 0 0 1px #ffffff05,0 10px 26px #0006 !important;
+}
+.multi-front:after {
+  content:"" !important;
+  position:absolute !important;
+  inset:0 8px auto 8px !important;
+  width:auto !important;
+  height:2px !important;
+  border:0 !important;
+  border-radius:0 0 3px 3px !important;
+  background:var(--rc) !important;
+  box-shadow:0 0 4px color-mix(in srgb,var(--rc) 38%,transparent),0 0 10px color-mix(in srgb,var(--rc) 18%,transparent) !important;
+  opacity:.78 !important;
+}
+.multi-front.category-order{--catc:#ff9b83 !important;}
+.multi-front.category-residue{--catc:#37d8ff !important;}
+.multi-front.category-factor{--catc:#c29aff !important;}
+.multi-front.category-digit{--catc:#54e8b4 !important;}
+.multi-front.category-other{--catc:#ffd05a !important;}
+.multi-category {
+  color:var(--catc) !important;
+  border-color:color-mix(in srgb,var(--catc) 40%,#29394d) !important;
+  background:color-mix(in srgb,var(--catc) 8%,#111d2c) !important;
+}
+
+
+/* Restore the original hand-card top edge: one continuous, full-width rarity strip. */
+.hand .card::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: auto !important;
+  height: 3px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--rc) !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  pointer-events: none !important;
+}
+.hand .card.rare::before,
+.hand .card.epic::before,
+.hand .card.legendary::before {
+  height: 3px !important;
+  box-shadow: 0 0 12px var(--rc) !important;
+}
 </style>
 </head>
 <body>
@@ -1676,7 +1878,7 @@ const RARITY={common:{label:'COMMON',weight:10},uncommon:{label:'UNCOMMON',weigh
 // Each card has an individually tuned draw weight; rarer/stronger cards have much smaller weights.
 const DEFS=[
 {id:'digits',symbol:'G',title:'桁数',desc:'1〜4桁のどれ？',formula:'桁数(n)',rarity:'common',cost:0,oneTime:true,weight:15},
-{id:'digitSum',symbol:'S',title:'各桁の総和',desc:'各桁を足し合わせる。',formula:'S(n)',rarity:'rare',cost:0,oneTime:true,weight:3.6},
+{id:'digitSum',symbol:'S',title:'各桁の総和',desc:'各桁を足し合わせる。',formula:'S(n)',rarity:'rare',cost:4,oneTime:true,weight:3.6},
 {id:'mod7',symbol:'R₇',title:'7で割った余り',desc:'余りを正確に特定。',formula:'n mod 7',rarity:'common',cost:1,oneTime:true,weight:13},
 {id:'parity',symbol:'±',title:'偶奇判定',desc:'偶数か、奇数か。',formula:'n mod 2',rarity:'common',cost:0,oneTime:true,weight:13},
 {id:'lastDigit',symbol:'u',title:'一の位',desc:'最後の1桁を公開。',formula:'n mod 10',rarity:'uncommon',cost:2,oneTime:true,weight:10},
@@ -1693,7 +1895,7 @@ const DEFS=[
 {id:'compare',symbol:'H/L',title:'大小判定',desc:'指定したNより大きい？',formula:'n > N',rarity:'uncommon',cost:7,oneTime:false,weight:6},
 {id:'multiple',symbol:'M',title:'素数の倍数判定',desc:'選んだ素数の倍数？',formula:'p | n',rarity:'uncommon',cost:3,oneTime:false,weight:6},
 {id:'modPick',symbol:'Rₚ',title:'指定剰余',desc:'2〜97の素数から法を選び、余りを公開。強力で再使用可能。',formula:'n mod p',rarity:'legendary',cost:15,oneTime:false,weight:0.18},
-{id:'interval',symbol:'[a,b]',title:'範囲スキャン',desc:'指定区間に入っている？',formula:'a ≤ n ≤ b',rarity:'rare',cost:5,oneTime:false,weight:3.5},
+{id:'interval',symbol:'AB',title:'範囲スキャン',desc:'指定区間に入っている？',formula:'a ≤ n ≤ b',rarity:'rare',cost:5,oneTime:false,weight:3.5},
 {id:'divisorCount',symbol:'d',title:'約数の個数',desc:'正の約数の個数。',formula:'d(n)',rarity:'rare',cost:5,oneTime:true,weight:3.8},
 {id:'primeFactors',symbol:'ω',title:'素因数の種類数',desc:'異なる素因数がいくつ？',formula:'ω(n)',rarity:'rare',cost:4,oneTime:true,weight:4},
 {id:'smallestPrime',symbol:'s',title:'最小素因数',desc:'1を除く最小の約数。1の場合は「なし」。',formula:'s(n)',rarity:'uncommon',cost:3,oneTime:true,weight:7},
@@ -1702,7 +1904,7 @@ const DEFS=[
 {id:'primePower',symbol:'pᵏ',title:'素数の累乗判定',desc:'ある素数pの累乗（p, p², p³, …）になっている？ 1は「いいえ」。',formula:'n = pᵏ ?',rarity:'uncommon',cost:3,oneTime:true,weight:5.8},
 {id:'totient',symbol:'φ',title:'オイラーのトーシェント',desc:'nと互いに素な1〜nの個数。',formula:'φ(n)',rarity:'epic',cost:9,oneTime:true,weight:1.4},
 {id:'divisorSum',symbol:'D',title:'約数の総和',desc:'正の約数をすべて足す。',formula:'σ(n)',rarity:'epic',cost:9,oneTime:true,weight:1.2},
-{id:'largestPrime',symbol:'Pmax',title:'最大素因数',desc:'最も大きい素因数。',formula:'P⁺(n)',rarity:'epic',cost:7,oneTime:true,weight:1.6},
+{id:'largestPrime',symbol:'P⁺',title:'最大素因数',desc:'最も大きい素因数。',formula:'P⁺(n)',rarity:'epic',cost:7,oneTime:true,weight:1.6},
 {id:'omega',symbol:'Ω',title:'素因数の重複込み個数',desc:'素因数分解の指数を重複込みで数える。例：12=2²·3なら3、3928=2³·491なら4。1は0。',formula:'Ω(n)',rarity:'rare',cost:4,oneTime:true,weight:3.8},
 {id:'maxExponent',symbol:'eₘₐₓ',title:'最大素因数指数',desc:'素因数分解で最大の指数。',formula:'max vₚ(n)',rarity:'rare',cost:4,oneTime:true,weight:3.6},
 {id:'v2',symbol:'v₂',title:'2進付値',desc:'2で何回割れる？',formula:'v₂(n)',rarity:'uncommon',cost:3,oneTime:true,weight:6},
@@ -1737,10 +1939,10 @@ const DEFS=[
 {id:'binaryDigits',symbol:'₂#',title:'2進数表記の桁数',desc:'nを2進数で表したときの桁数を公開。',formula:'⌊log₂ n⌋+1',rarity:'rare',cost:4,oneTime:true,weight:3.5},
 {id:'digitLcm',symbol:'lcm',title:'各桁の最小公倍数',desc:'0以外の各桁の最小公倍数を公開（0は計算から除く）。',formula:'lcm(nonzero digits)',rarity:'legendary',cost:12,oneTime:true,weight:0.28},
 {id:'digitGcd',symbol:'gcd',title:'各桁の最大公約数',desc:'すべての桁の数字の最大公約数を公開。',formula:'gcd(digits(n))',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
-{id:'leadingLastDiff',symbol:'|I−u|',title:'最高位と一の位の差',desc:'最高位の数字と一の位の数字の差の絶対値を公開。',formula:'|leading(n)−lastDigit(n)|',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
-{id:'quotient10000',symbol:'⌊10000/n⌋',title:'10000をnで割った商',desc:'10000÷秘密の数 n の整数商を公開。',formula:'⌊10000/n⌋',rarity:'rare',cost:4,oneTime:true,weight:3.5},
+{id:'leadingLastDiff',symbol:'ΔI',title:'最高位と一の位の差',desc:'最高位の数字と一の位の数字の差の絶対値を公開。',formula:'|leading(n)−lastDigit(n)|',rarity:'uncommon',cost:3,oneTime:true,weight:5.2},
+{id:'quotient10000',symbol:'÷n',title:'10000をnで割った商',desc:'10000÷秘密の数 n の整数商を公開。',formula:'⌊10000/n⌋',rarity:'rare',cost:4,oneTime:true,weight:3.5},
 {id:'nearerOfTwo',symbol:'↔?',title:'近い方',desc:'指定した2つの数のうち、nに近い方を公開。同距離なら大きい方。',formula:'argminₓ∈{A,B} |n−x|',rarity:'uncommon',cost:3,oneTime:false,weight:5.5},
-{id:'neighborhood',symbol:'[k±d]',title:'近傍',desc:'指定した k,d について |n−k|≤d かどうかを判定。',formula:'|n−k| ≤ d ?',rarity:'uncommon',cost:3,oneTime:false,weight:5.5},
+{id:'neighborhood',symbol:'±d',title:'近傍',desc:'指定した k,d について |n−k|≤d かどうかを判定。',formula:'|n−k| ≤ d ?',rarity:'uncommon',cost:3,oneTime:false,weight:5.5},
 {id:'threeIntervals',symbol:'Ⅲ',title:'3区間',desc:'しきい値 a<b に対して n≤a、a<n≤b、b<n のどこに入るかを公開。',formula:'n≤a / a<n≤b / b<n',rarity:'rare',cost:5,oneTime:false,weight:3.4}
 ];
 const CATEGORY_META={
